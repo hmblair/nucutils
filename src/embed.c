@@ -61,13 +61,57 @@ bool checkAccess(const char *filename) {
 
 int main(int argc, char **argv) {
 
-    if (argc != 3) {
-        printf("\n    usage: embed IN_FASTA OUT_HDF5.\n\n");
-        exit(EXIT_FAILURE);
+    char c;
+    extern char *optarg; extern int optind;
+    int optionIndex = 0;
+    static const struct option longOptions[] = {
+        {"help", no_argument, NULL, 'h'},
+        {"output", required_argument, NULL, 'o'},
+        {"compression", required_argument, NULL, 'c'},
+        {"overwrite", no_argument, NULL, 0},
+        {"group",required_argument, NULL, 0},
+        {0, 0, 0, 0}
+    };
+
+    const char *inFile = NULL;
+    const char *outFile = "embedded.h5";
+    DataspaceFlags dFlags = defaultDataspaceFlags();
+    bool overwrite = false;
+
+    while ((c = getopt_long(argc, argv, "ho:c:", longOptions, &optionIndex)) != -1) {
+        switch (c) {
+          case 0:
+            if (strcmp(longOptions[optionIndex].name, "overwrite") == 0) {
+                overwrite = true;
+            }
+
+            if (strcmp(longOptions[optionIndex].name, "group") == 0) {
+                dFlags.group = optarg;
+            }
+            break;
+          case 'o':
+            outFile = optarg;
+            break;
+          case 'c':
+            dFlags.compression = atoi(optarg);
+            break;
+          default:
+            exit(EXIT_FAILURE);
+          }
     }
 
-    const char *inFile = argv[1];
-    const char *outFile = argv[2];
+    if (optind == argc) {
+        printf("No FASTA file was provided.\n");
+        exit(EXIT_FAILURE);
+    } else if (optind < argc - 1) {
+        exit(EXIT_FAILURE);
+    } else {
+        inFile = argv[optind];
+        if (!checkAccess(inFile)) {
+            fprintf(stderr, "The provided FASTA file \"%s\" cannot be opened.\n", inFile);
+            exit(EXIT_FAILURE);
+        }
+    }
 
     // Open the FASTA file
     IndexedFASTA ixFASTA = openIndexedFASTA(inFile);
@@ -77,11 +121,6 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-
-
-    bool overwrite = true;
-    DataspaceFlags dFlags = defaultDataspaceFlags();
-    dFlags.group = NULL;
 
     // Check if the output file exists; if it does, check if the
     // user wants it deleted
@@ -119,7 +158,12 @@ int main(int argc, char **argv) {
     char *sequence = getSequence(ixFASTA, 0);
     size_t seqLength = strlen(sequence);
     // Create an HDF5 file to store the output
-    Filespace filespace = makeFilespace(outFile);
+    Filespace filespace;
+    if (outFileExists) {
+        filespace = openFilespace(outFile, H5F_ACC_RDWR);
+    } else {
+        filespace = makeFilespace(outFile);
+    }
 
     hsize_t dims[2] = {ixFASTA.numSequences, seqLength};
     Dataspace dataspace = makeDataspace(
