@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cd src
+mkdir build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX=../../ ..
+make
+make install
+cd ..
+rm -rf build
