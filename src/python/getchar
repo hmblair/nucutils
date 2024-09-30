@@ -1,0 +1,14 @@
+#!/opt/homebrew/anaconda3/bin/python3
+
+import sys
+if len(sys.argv) > 4:
+    print('Usage: getlen <str> <ix> <ix2>')
+    exit(1)
+
+string = sys.argv[1].strip()
+ix = int(sys.argv[2])
+if len(sys.argv) == 3:
+    print(string[ix])
+else:
+    ix2 = int(sys.argv[3])
+    print(string[ix:ix2])
