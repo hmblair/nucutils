@@ -1,8 +1,8 @@
 ## Overview
 
 So far, there are three functions available:
-   1. `getchar`, which gets the `n`-th character of the string,
-   2. `getlength`, which gets the length of the string, and
+   1. `getchar`, which gets the `n`-th character of the string, or all characters between `m` and `n` if two integers are passed;
+   2. `getlength`, which gets the length of the string; and
    3. `embed`, which takes a FASTA file and converts it to an HDF5 file by   converting the bases into integers.
 
 ## Installation
