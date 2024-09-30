@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
 
     bool overwrite = true;
     DataspaceFlags dFlags = defaultDataspaceFlags();
-    dFlags.group = "grp";
+    dFlags.group = NULL;
 
     // Check if the output file exists; if it does, check if the
     // user wants it deleted
