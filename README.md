@@ -22,8 +22,8 @@ is sufficient.
 
 Installation is done by cloning the repository and running the installation script.
 ```
-git clone https://github.com/hmblair/cmuts
-cd cmuts
+git clone https://github.com/hmblair/nucutils
+cd nucutils
 ./configure
 ```
 Don't forget to add the `./bin` directory to your path.
