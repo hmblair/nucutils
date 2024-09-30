@@ -119,7 +119,7 @@ AlignmentCount countMutations(
 
 void embedSequence(
     const char *sequence,
-    float *embeddedSequence
+    uint64_t *embeddedSequence
 );
 
 #endif

@@ -31,7 +31,7 @@ void embedFASTA(
         int loopSize = MIN(CHUNK_SIZE, ixFASTA.numSequences - ix_b);
         resizeMemspace(&memspace, loopSize);
         fillMemspace(memspace, 0.0);
-        float *embeddedSequences = memspace.data;
+        uint64_t *embeddedSequences = memspace.data;
         
         for (int ix = ix_b; ix < ix_b + loopSize; ix++) {
 

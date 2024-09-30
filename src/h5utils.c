@@ -176,7 +176,7 @@ Dataspace makeDataspace(
             exit(EXIT_FAILURE);
         }
         // Create the corresponding dataset
-        dataspace.datasetID = H5Dcreate2(locationID, name, H5T_NATIVE_FLOAT, dataspace.dataspaceID, H5P_DEFAULT, plist, H5P_DEFAULT);
+        dataspace.datasetID = H5Dcreate2(locationID, name, H5T_NATIVE_ULLONG, dataspace.dataspaceID, H5P_DEFAULT, plist, H5P_DEFAULT);
         if (dataspace.datasetID< 0) {
             fprintf(stderr, "Error creating dataset %s in file %s\n", name, filespace.filename);
             exit(EXIT_FAILURE);
@@ -264,7 +264,7 @@ Memspace initMemspace(Dataspace dataspace, size_t slabSize) {
 
     Memspace memspace;
     memspace.ndims = dataspace.ndims;
-    memspace.dataSize = sizeof(float);
+    memspace.dataSize = sizeof(uint64_t);
     // Initialise the slice to be pointing at the beginning of
     // the dataset
     memspace.slabOffsets = calloc(dataspace.ndims, sizeof(hsize_t));
@@ -291,7 +291,7 @@ Memspace initMemspace(Dataspace dataspace, size_t slabSize) {
         memspace.numElements *= dataspace.dims[i];
         memspace.numElementsPerUnit *= dataspace.dims[i];
     }
-    memspace.data = (float*)calloc(memspace.numElements, sizeof(float));
+    memspace.data = (uint64_t*)calloc(memspace.numElements, sizeof(uint64_t));
     if (!memspace.data) {
         fprintf(stderr, "Memory allocation failed when initialising the memspace.\n");
         exit(EXIT_FAILURE);
@@ -327,7 +327,7 @@ void resizeMemspace(Memspace *memspace, size_t slabSize) {
     for (int i = 0; i < memspace->ndims; ++i) {
         memspace->numElements *= memspace->slabDims[i];
     }
-    memspace->data = realloc(memspace->data, memspace->numElements * sizeof(float));
+    memspace->data = realloc(memspace->data, memspace->numElements * sizeof(uint64_t));
     if (memspace->data == NULL) {
         fprintf(stderr, "Error reallocating memory when resizing a memspace.\n");
         exit(EXIT_FAILURE);
@@ -350,7 +350,7 @@ void resizeMemspace(Memspace *memspace, size_t slabSize) {
 }
 
 
-void fillMemspace(Memspace memspace, float value) {
+void fillMemspace(Memspace memspace, uint64_t value) {
     
     for (int i = 0; i < memspace.numElements; i++) {
         memspace.data[i] = value;
@@ -395,7 +395,7 @@ void loadSlab(Dataspace dataspace, Memspace memspace, hsize_t ix) {
     H5Sselect_hyperslab(dataspace.dataspaceID, H5S_SELECT_SET, memspace.slabOffsets, NULL, memspace.slabDims, NULL);
 
     // Read the selected record into memory
-    herr_t status = H5Dread(dataspace.datasetID, H5T_NATIVE_FLOAT, memspace.memspaceID, dataspace.dataspaceID, H5P_DEFAULT, memspace.data);
+    herr_t status = H5Dread(dataspace.datasetID, H5T_NATIVE_ULLONG, memspace.memspaceID, dataspace.dataspaceID, H5P_DEFAULT, memspace.data);
     if (status < 0) {
         fprintf(stderr, "Error reading slab for index %llu\n", ix);
         exit(EXIT_FAILURE);
@@ -427,7 +427,7 @@ void writeSlab(Dataspace dataspace, Memspace memspace, hsize_t ix) {
         }
 
         // Write the data from the memspace to the selected hyperslab in the file
-        status = H5Dwrite(dataspace.datasetID, H5T_NATIVE_FLOAT, memspace.memspaceID, dataspace.dataspaceID, H5P_DEFAULT, memspace.data);
+        status = H5Dwrite(dataspace.datasetID, H5T_NATIVE_ULLONG, memspace.memspaceID, dataspace.dataspaceID, H5P_DEFAULT, memspace.data);
         if (status < 0) {
             fprintf(stderr, "Error writing slab for index %llu\n", ix);
             exit(EXIT_FAILURE);

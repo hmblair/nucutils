@@ -35,7 +35,7 @@ typedef struct {
     hsize_t *slabDims;
     hsize_t *slabOffsets;
     int ndims;
-    float *data;
+    uint64_t *data;
     size_t dataSize;
     size_t numElements;
     size_t numElementsPerUnit;
@@ -74,7 +74,7 @@ Memspace initMemspace(Dataspace dataspace, size_t slabSize);
 
 void resizeMemspace(Memspace *memspace, size_t slabSize);
 
-void fillMemspace(Memspace memspace, float value);
+void fillMemspace(Memspace memspace, uint64_t value);
 
 void freeMemspace(Memspace memspace);
 
