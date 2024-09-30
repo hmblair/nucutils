@@ -62,7 +62,7 @@ bool checkAccess(const char *filename) {
 int main(int argc, char **argv) {
 
     if (argc != 3) {
-        printf("Error.\n");
+        printf("\n    usage: embed IN_FASTA OUT_HDF5.\n\n");
         exit(EXIT_FAILURE);
     }
 
