@@ -23,6 +23,12 @@ pkg_check_modules(HTSLIB REQUIRED htslib)
 add_executable(embed embed.c ${H5_UTILS}.c ${HTSLIB_UTILS}.c)
 # Add executable for convert
 add_executable(convert convert.c)
+# Add executable for squeeze
+add_executable(squeeze squeeze.c)
+# Add executable for getlen
+add_executable(getlen getlen.c)
+# Add executable for getchar
+add_executable(getchar getchar.c)
 
 # Include directories
 target_include_directories(embed PRIVATE
@@ -47,6 +53,9 @@ target_link_libraries(embed PRIVATE
 # Compiler options
 target_compile_options(embed PRIVATE -O3)
 target_compile_options(convert PRIVATE -O3)
+target_compile_options(squeeze PRIVATE -O3)
+target_compile_options(getlen PRIVATE -O3)
+target_compile_options(getchar PRIVATE -O3)
 
 if(APPLE)
     # M1 Mac specific flags
@@ -57,6 +66,6 @@ if(APPLE)
 endif()
 
 # Installation target
-install(TARGETS embed convert
+install(TARGETS embed convert squeeze getlen getchar
     RUNTIME DESTINATION bin
 )

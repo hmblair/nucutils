@@ -2,9 +2,10 @@
 
 So far, there are four functions available:
    1. `getchar`, which gets the `n`-th character of the string, or all characters between `m` and `n` if two integers are passed;
-   2. `getlength`, which gets the length of the string; and
-   3. `embed`, which takes a FASTA file and converts it to an HDF5 file by   converting the bases into integers.
-   4. `convert`, which takes a FASTA file and replaces all copies of the first specified base with the second specified base *in place*.
+   2. `getlength`, which gets the length of all strings passed;
+   3. `embed`, which takes a FASTA file and converts it to an HDF5 file by   converting the bases into integers;
+   4. `convert`, which takes a FASTA file and replaces all copies of the first specified base with the second specified base *in place*; and
+   5. `squeeze`, which converts a multi-line FASTA file into a single-line one *in place*.
 
 ## Installation
 

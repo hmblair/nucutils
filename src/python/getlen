@@ -1,8 +1,0 @@
-#!/opt/homebrew/anaconda3/bin/python3
-
-import sys
-if len(sys.argv) != 2:
-    print('Usage: getlen <str>')
-    exit(1)
-
-print(len(sys.argv[1]))

@@ -9,12 +9,12 @@
 int main(int argc, char *argv[]) {
 
     if (argc != 4) {
-        fprintf(stderr, "Usage: %s <filename> <origBase> <newBase>\n", argv[0]);
+        fprintf(stderr, "  usage: %s <filename> <origBase> <newBase>\n", argv[0]);
         return EXIT_FAILURE;
     }
 
     if (strlen(argv[2]) != 1 || strlen(argv[3]) != 1) {
-        fprintf(stderr, "Both bases must be single characters.\n");
+        fprintf(stderr, "  Both bases must be single characters.\n");
         return EXIT_FAILURE;
     }
 
@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 
     FILE *file = fopen(argv[1], "rb+");
     if (file == NULL) {
-        perror("Error opening file.\n");
+        perror("Error opening file");
         return EXIT_FAILURE;
     }
 
