@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(embed C)
+project(nucutils C)
 
 # Set C standard
 set(CMAKE_C_STANDARD 11)
@@ -19,23 +19,25 @@ find_package(HDF5 REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(HTSLIB REQUIRED htslib)
 
-# Add executable
-add_executable(${PROJECT_NAME} ${PROJECT_NAME}.c ${H5_UTILS}.c ${HTSLIB_UTILS}.c)
+# Add executable for embed
+add_executable(embed embed.c ${H5_UTILS}.c ${HTSLIB_UTILS}.c)
+# Add executable for convert
+add_executable(convert convert.c)
 
 # Include directories
-target_include_directories(${PROJECT_NAME} PRIVATE
+target_include_directories(embed PRIVATE
     ${HTSLIB_INCLUDE_DIRS}
     ${HDF5_INCLUDE_DIRS}
     ${MPI_C_INCLUDE_DIRS}
 )
 
 # Link directories
-target_link_directories(${PROJECT_NAME} PRIVATE
+target_link_directories(embed PRIVATE
     ${HTSLIB_LIBRARY_DIRS}
 )
 
 # Link libraries
-target_link_libraries(${PROJECT_NAME} PRIVATE
+target_link_libraries(embed PRIVATE
     ${HTSLIB_LIBRARIES}
     ${HDF5_LIBRARIES}
     MPI::MPI_C
@@ -43,17 +45,18 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 
 # Compiler options
-target_compile_options(${PROJECT_NAME} PRIVATE -O3)
+target_compile_options(embed PRIVATE -O3)
+target_compile_options(convert PRIVATE -O3)
 
 if(APPLE)
     # M1 Mac specific flags
     if(CMAKE_SYSTEM_PROCESSOR STREQUAL "arm64")
-        target_include_directories(${PROJECT_NAME} PRIVATE /opt/homebrew/opt/libomp/include)
-        target_link_directories(${PROJECT_NAME} PRIVATE /opt/homebrew/opt/libomp/lib)
+        target_include_directories(embed PRIVATE /opt/homebrew/opt/libomp/include)
+        target_link_directories(embed PRIVATE /opt/homebrew/opt/libomp/lib)
     endif()
 endif()
 
 # Installation target
-install(TARGETS ${PROJECT_NAME}
+install(TARGETS embed convert
     RUNTIME DESTINATION bin
 )
