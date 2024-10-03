@@ -1,6 +1,6 @@
 ## Overview
 
-So far, there are four functions available:
+So far, there are five functions available:
    1. `getchar`, which gets the `n`-th character of the string, or all characters between `m` and `n` if two integers are passed;
    2. `getlength`, which gets the length of all strings passed;
    3. `embed`, which takes a FASTA file and converts it to an HDF5 file by   converting the bases into integers;
