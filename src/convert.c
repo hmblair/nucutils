@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (strlen(argv[2]) != 1 || strlen(argv[3]) != 1) {
-        fprintf(stderr, "Both bases must be single characters.");
+        fprintf(stderr, "Both bases must be single characters.\n");
         return EXIT_FAILURE;
     }
 
@@ -23,8 +23,8 @@ int main(int argc, char *argv[]) {
 
     FILE *file = fopen(argv[1], "rb+");
     if (file == NULL) {
-        perror("Error opening file");
-        return 1;
+        perror("Error opening file.\n");
+        return EXIT_FAILURE;
     }
 
     char buffer[BUFFER_SIZE];
